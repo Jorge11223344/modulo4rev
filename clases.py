@@ -167,11 +167,11 @@ class Video(Anuncio):
     FORMATO = "Video"
     SUB_TIPOS = ("instream", "outstream")  ## Parentesis redondo para especificar una tupla
 
-    def __init__(self,duracion, subtipo):
-        self.ancho =1
-        self.alto = 1
+    def __init__(self,url_archivo, url_click, duracion, subtipo):
+        super().__init__(1,1,url_archivo,url_click,sub_tipo)
+
         self.__duracion = duracion if duracion > 0 else 5
-        self.sub_tipo = subtipo
+        
 
     @property
     def duracion(self):
@@ -179,18 +179,18 @@ class Video(Anuncio):
     
     @duracion.setter
     def duracion(self,duracion):
-        self.__duracion = duracion
+        self.__duracion = duracion if duracion >0 else 5
 
     
-    def comprimir_anuncio():
+    def comprimir_anuncio(self):
         print("Compresion de video no implementado aun")
 
     
-    def redimensionar_anuncio():
+    def redimensionar_anuncio(self):
         print("Recorte de video no implementado")
 
     def __repr__(self):
-        return f"{Video.FORMATO} -{self.duracion}"
+        return f"{Video.FORMATO} -{self.duracion} mins "
 
 class Display(Anuncio):
     FORMATO = "Display"
@@ -199,11 +199,11 @@ class Display(Anuncio):
         super().__init__(ancho, alto, url_archivo, url_click, sub_tipo)
 
 
-    def comprimir_anuncio():
+    def comprimir_anuncio(self):
         print("Compresión de anuncios Display  no implementada aun")
 
     
-    def redimensionar_anuncio():
+    def redimensionar_anuncio(self):
         print("Redimensionamineto de anuncios Display no implementado aún")
 
     def __repr__(self):
@@ -216,11 +216,11 @@ class Social(Anuncio):
     def __init__(self, ancho, alto, url_archivo, url_click, sub_tipo):
         super().__init__(ancho, alto, url_archivo, url_click, sub_tipo)
 
-    def comprimir_anuncio():
+    def comprimir_anuncio(self):
         print("compresion de anuncio de redes sociales no imlementada aún")
 
     
-    def redimensionar_anuncio():
+    def redimensionar_anuncio(self):
         print("Redimensionamineto de anuncios de redes sociales no implementada aún")
 
     def __repr__(self):
