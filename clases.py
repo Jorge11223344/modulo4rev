@@ -182,6 +182,7 @@ class Campana:
 
         return (
             f"Nombre de la campaña: {self.nombre}\n"
+            #f"Desde : {self.fecha_inicio} hasta el {self.fecha_termino}\n "
             f"Anuncios: {contador['Video']} Video, "
             f"{contador['Display']} Display, "
             f"{contador['Social']} Social"
