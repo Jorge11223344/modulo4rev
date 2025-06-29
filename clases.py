@@ -69,11 +69,11 @@ class Anuncio(ABC):
 
     
     @abstractmethod
-    def comprimir_anuncio():
+    def comprimir_anuncio(self):
         pass
 
     @abstractmethod
-    def redimensionar_anuncio():
+    def redimensionar_anuncio(self):
         pass
 
 
@@ -94,33 +94,47 @@ class Campana:
     def componer_anuncio(self):
 
         opcion = int(input("que tipo de anuncio quiere 1-para video 2_para display, 3-para social"))
-        if opcion ==1:
-            duracion = int(input("cual es la duracion del video minimo 5 minutos"))
-            new_anuncio = Video(duracion)
-        elif opcion ==2:
-            new_anuncio = Display()
-        elif opcion ==3:
-            new_anuncio = Social()
+        if opcion == 1:
+            url_archivo = input("URL del archivo del video: ")
+            url_click = input("URL de clic del video: ")
+            duracion = int(input("Duración del video: "))
+            sub_tipo = input("Subtipo de video (instream / outstream): ")
+            new_anuncio = Video(url_archivo, url_click, duracion, sub_tipo)
 
+        elif opcion == 2:
+            ancho = int(input("Ancho del display: "))
+            alto = int(input("Alto del display: "))
+            url_archivo = input("URL del archivo: ")
+            url_click = input("URL del clic: ")
+            sub_tipo = input("Subtipo del display (tradicional / native): ")
+            new_anuncio = Display(ancho, alto, url_archivo, url_click, sub_tipo)
+
+        elif opcion == 3:
+            ancho = int(input("Ancho del anuncio social: "))
+            alto = int(input("Alto del anuncio social: "))
+            url_archivo = input("URL del archivo: ")
+            url_click = input("URL del clic: ")
+            sub_tipo = input("Subtipo social (facebook / linkedin): ")
+            new_anuncio = Social(ancho, alto, url_archivo, url_click, sub_tipo)
+        else:
+            print("No se creo ningun anuncio")
+            return None
         return new_anuncio
 
     def agregar_anuncio(self):        
         while True:
             try:
-                opcion = int(input("que tipo de anuncio quieres 1 para video 2 para diplay y 3 para social"))
-                if opcion ==1:
-                    duracion =int(input("cual esla duracion del video minimo es 5 minutos"))
-                    new_anuncio = Video(duracion)
-                elif opcion == 2:
-                    new_anuncio = Display()
-                elif opcion == 3:
-                    new_anuncio = Social()
-                else:
+                continuar = input("¿Desea agregar un nuevo anuncio? (s/n): ").lower()
+                if continuar != 's':
                     break
-                self.__anuncios.append(new_anuncio)
 
+                nuevo_anuncio = self.componer_anuncio()
+                if nuevo_anuncio:
+                    self.__anuncios.append(nuevo_anuncio)
+                else:
+                    print("No se creó ningún anuncio.")
             except Exception as e:
-                pass
+                print(f"Error al agregar anuncio: {e}")
 
     @property
     def nombre(self):
@@ -156,7 +170,22 @@ class Campana:
         return self.__anuncios
     
     def __repr__(self):
-        return f"nombre de campana  :{self.nombre} - {self.__anuncios}"
+        contador = {"Video": 0, "Display": 0, "Social": 0}
+
+        for anuncio in self.__anuncios:
+            if isinstance(anuncio, Video):
+                contador["Video"] += 1
+            elif isinstance(anuncio, Display):
+                contador["Display"] += 1
+            elif isinstance(anuncio, Social):
+                contador["Social"] += 1
+
+        return (
+            f"Nombre de la campaña: {self.nombre}\n"
+            f"Anuncios: {contador['Video']} Video, "
+            f"{contador['Display']} Display, "
+            f"{contador['Social']} Social"
+        )
 
 
 
@@ -167,7 +196,7 @@ class Video(Anuncio):
     FORMATO = "Video"
     SUB_TIPOS = ("instream", "outstream")  ## Parentesis redondo para especificar una tupla
 
-    def __init__(self,url_archivo, url_click, duracion, subtipo):
+    def __init__(self,url_archivo, url_click, duracion, sub_tipo):
         super().__init__(1,1,url_archivo,url_click,sub_tipo)
 
         self.__duracion = duracion if duracion > 0 else 5
