@@ -1,5 +1,7 @@
 from clases import *
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
 """
 nombre = input("nombre de campaña : ")
 
@@ -66,7 +68,7 @@ except (largoExcedidoError, SubTipoInvalidoError) as e:
     Crea el archivo error.log en modo adjuntar
     """
     with open("error.log", "a", encoding="utf-8") as f:
-        hora_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        hora_actual = datetime.now(ZoneInfo("America/Santiago")).strftime("%Y-%m-%d %H:%M:%S")
 
         #escribe el error con fecha,hora,tipo de error y mensaje
 

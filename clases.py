@@ -12,7 +12,14 @@ class Anuncio(ABC):
         self.__alto = alto if alto > 0 else 1
         self.__url_archivo = url_archivo
         self.__url_click = url_click
-        self.__sub_tipo = sub_tipo
+        if (
+            isinstance(self, Video) and sub_tipo in Video.SUB_TIPOS or
+            isinstance(self, Display) and sub_tipo in Display.SUB_TIPOS or
+            isinstance(self, Social) and sub_tipo in Social.SUB_TIPOS
+        ):
+            self.__sub_tipo = sub_tipo
+        else:
+            raise SubTipoInvalidoError("Subtipo inválido para el formato correspondiente, escribiste mal el subtipo.")
 
 # Se encapculan los atributos con getter y setters, como lo solicita el desafio
 
