@@ -46,6 +46,7 @@ try:
 
 except (largoExcedidoError, SubTipoInvalidoError) as e:
     with open("error.log", "a", encoding="utf-8") as f:
-        f.write(f"[ERROR] {type(e).__name__}: {str(e)}\n")
+        hora_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"[{hora_actual}] {type(e).__name__}: {str(e)}\n")
     print("Ocurrió un error. Revisa el archivo error.log.")
  
