@@ -2,19 +2,26 @@ from abc import ABC, abstractmethod
 from error import largoExcedidoError, SubTipoInvalidoError
 
 class Anuncio(ABC):
-    def __init__(self,ancho,alto,url_archivo,url_click,sub_tipo):
+    """
+    Clase abstracta actua como clase padre de las clases social,video y Display
+    """
+
+
+    def __init__(self,ancho: int,alto:int,url_archivo:str,url_click:str,sub_tipo:str):
         self.__ancho = ancho if ancho > 0 else 1  ## esto es una forma de filtrar en la misma linea, se evita el validador que debería realizarse en otro archivo
         self.__alto = alto if alto > 0 else 1
         self.__url_archivo = url_archivo
         self.__url_click = url_click
         self.__sub_tipo = sub_tipo
 
+# Se encapculan los atributos con getter y setters, como lo solicita el desafio
+
     @property
-    def ancho(self):
+    def ancho(self)->int:
         return self.__ancho
     
     @ancho.setter
-    def ancho(self,ancho):
+    def ancho(self,ancho:int):
         self.__ancho = ancho
 
     @property
@@ -22,7 +29,7 @@ class Anuncio(ABC):
         return self.__alto
     
     @alto.setter
-    def alto(self,alto):
+    def alto(self,alto:int):
         self.__alto = alto
 
     @property
@@ -30,7 +37,7 @@ class Anuncio(ABC):
         return self.__url_archivo
     
     @url_archivo.setter
-    def url_archivo(self,url_archivo):
+    def url_archivo(self,url_archivo:str):
         self.__url_archivo = url_archivo
 
     @property
@@ -38,7 +45,7 @@ class Anuncio(ABC):
         return self.__url_click
     
     @url_click.setter
-    def url_click(self,url_click):
+    def url_click(self,url_click:str):
         self.__url_click = url_click
 
     @property
@@ -46,7 +53,9 @@ class Anuncio(ABC):
         return self.__sub_tipo
     
     @sub_tipo.setter
-    def sub_tipo(self,sub_tipo):
+    def sub_tipo(self,sub_tipo:str):
+
+
        # si la instancia actual que es self(==) es igual a una instacia de video y self.subtipo == video
        #  o de social
        #  o de display.
@@ -56,11 +65,13 @@ class Anuncio(ABC):
             raise SubTipoInvalidoError("Error de tipo invalido.")
     
            
-####################################################################################
-
-
     @staticmethod
     def mostrar_formatos():
+
+        """
+        Muestra los subtipos que existen en cada formato
+        """
+
         clases_anuncio = [Video,Display,Social]
         for i, clase in enumerate(clases_anuncio,start=1):## parte de 1 el indice
             print(f"FORMATO {i}:{clase.FORMATO}")
@@ -84,7 +95,14 @@ class Anuncio(ABC):
 
 
 class Campana:
-    def __init__(self,nombre,fecha_inicio,fecha_termino):
+
+    """
+    Representa una campaña publicitaria con un conjunto de anuncios
+    """
+
+
+
+    def __init__(self,nombre:str,fecha_inicio,fecha_termino):
        
         self.__nombre =nombre
         self.__fecha_inicio = fecha_inicio
@@ -92,6 +110,10 @@ class Campana:
         self.__anuncios = [self.componer_anuncio()]
 
     def componer_anuncio(self):
+
+        """
+        Crea un anuncio solicitando datos al usuario
+        """
 
         opcion = int(input("que tipo de anuncio quiere 1-para video 2_para display, 3-para social"))
         if opcion == 1:
@@ -121,7 +143,12 @@ class Campana:
             return None
         return new_anuncio
 
-    def agregar_anuncio(self):        
+    def agregar_anuncio(self):  
+
+        """
+        Permite al usuario agregar multiples anuncios 
+        """
+
         while True:
             try:
                 continuar = input("¿Desea agregar un nuevo anuncio? (s/n): ").lower()
@@ -141,7 +168,7 @@ class Campana:
         return self.__nombre
 
     @nombre.setter
-    def nombre(self, nombre):
+    def nombre(self, nombre:str):
         if len(nombre) <= 250:
             self.__nombre = nombre
         else:
@@ -170,6 +197,13 @@ class Campana:
         return self.__anuncios
     
     def __repr__(self):
+
+        """
+        Muestra resumen con cantidad de anuncios según tipo
+        """
+
+
+
         contador = {"Video": 0, "Display": 0, "Social": 0}
 
         for anuncio in self.__anuncios:
@@ -194,13 +228,20 @@ class Campana:
 
 
 class Video(Anuncio):
-    FORMATO = "Video"
-    SUB_TIPOS = ("instream", "outstream")  ## Parentesis redondo para especificar una tupla
 
-    def __init__(self,url_archivo, url_click, duracion, sub_tipo):
+    """
+    Anuncio tipo video
+    
+    """
+
+
+    FORMATO:str = "Video"
+    SUB_TIPOS:tuple = ("instream", "outstream")  ## Parentesis redondo para especificar una tupla
+
+    def __init__(self,url_archivo:str, url_click:str, duracion:int, sub_tipo:str):
         super().__init__(1,1,url_archivo,url_click,sub_tipo)
 
-        self.__duracion = duracion if duracion > 0 else 5
+        self.__duracion:int = duracion if duracion > 0 else 5
         
 
     @property
@@ -208,7 +249,7 @@ class Video(Anuncio):
         return self.__duracion
     
     @duracion.setter
-    def duracion(self,duracion):
+    def duracion(self,duracion:int):
         self.__duracion = duracion if duracion >0 else 5
 
     
@@ -223,9 +264,15 @@ class Video(Anuncio):
         return f"{Video.FORMATO} -{self.duracion} mins "
 
 class Display(Anuncio):
+
+    """
+    Anuncio tipo Display o imagen
+    """
+
+
     FORMATO = "Display"
     SUB_TIPOS = ("tradicional", "native")  ## Parentesis redondo para especificar una tupla
-    def __init__(self, ancho, alto, url_archivo, url_click, sub_tipo):
+    def __init__(self, ancho:int, alto:int, url_archivo:str, url_click:str, sub_tipo:str):
         super().__init__(ancho, alto, url_archivo, url_click, sub_tipo)
 
 
@@ -240,10 +287,16 @@ class Display(Anuncio):
         return f"{Display.FORMATO}"
 
 class Social(Anuncio):
+
+    """
+    Anuncio tipo redes sociales
+    """
+
+
     FORMATO = "Social"
     SUB_TIPOS = ("facebook", "linkedin")  ## Parentesis redondo para especificar una tupla
 
-    def __init__(self, ancho, alto, url_archivo, url_click, sub_tipo):
+    def __init__(self, ancho:int, alto:int, url_archivo:str, url_click:str, sub_tipo:str):
         super().__init__(ancho, alto, url_archivo, url_click, sub_tipo)
 
     def comprimir_anuncio(self):
